@@ -1,0 +1,36 @@
+{
+  "name": "inside-server",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node --harmony index.js ",
+    "tasks-q": "node --harmony tasks.quotes.js",
+    "tasks-n": "node --harmony tasks.news.js",
+    "feed": "node --harmony test-feed.js"
+  },
+  "dependencies": {
+    "ajv": "^5.2.0",
+    "apn": "^2.1.4",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "charset": "^1.0.0",
+    "co": "^4.6.0",
+    "cookie-parser": "^1.4.3",
+    "escape-string-regexp": "^1.0.5",
+    "express": "^4.15.3",
+    "feedparser": "^2.2.1",
+    "iconv-lite": "^0.4.18",
+    "jschardet": "^1.4.2",
+    "moment": "^2.18.1",
+    "mongodb": "^2.2.29",
+    "morgan": "^1.8.2",
+    "multer": "^1.3.0",
+    "nodemailer": "^4.0.1",
+    "request": "^2.81.0",
+    "request-debug": "^0.2.0",
+    "request-promise": "^4.2.1",
+    "validator": "^7.2.0",
+    "xml2js": "^0.4.17",
+    "yamljs": "^0.3.0"
+  }
+}
