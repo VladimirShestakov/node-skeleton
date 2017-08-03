@@ -12,30 +12,30 @@ const ObjectID = require('mongodb').ObjectID;
  * @param options
  * @returns {Promise}
  */
-Db.prototype.initCollection = async function(name, indexes={}, options = {}){
+Db.prototype.initCollection = async function (name, indexes = {}, options = {}) {
     const collection = await (new Promise((resolve, reject) => {
         options.strict = true;
         this.collection(name, options, (err, coll) => {
-            if (err !== null){
+            if (err !== null) {
                 this.createCollection(name, {}, (err, coll) => {
-                    if (err === null){
+                    if (err === null) {
                         console.log(`Created new collection "${name}"`);
                         resolve(coll);
-                    }else{
+                    } else {
                         reject(err);
                     }
                 });
-            }else {
+            } else {
                 resolve(coll);
             }
         });
     }));
     const indexKeys = Object.keys(indexes);
-    for (let key of indexKeys){
-        if (!indexes[key][1]){
+    for (let key of indexKeys) {
+        if (!indexes[key][1]) {
             indexes[key].push({});
         }
-        if (!indexes[key][1].name){
+        if (!indexes[key][1].name) {
             indexes[key][1].name = key;
         }
         if (!await collection.indexExists(indexes[key][1].name)) {
@@ -49,11 +49,11 @@ Db.prototype.ObjectID = ObjectID;
 
 class Database {
 
-    constructor(){
+    constructor() {
 
     }
 
-    async init(config, services){
+    async init(config, services) {
         this.config = config;
         //this.services = services;
         return await MongoClient.connect(this.config.url);

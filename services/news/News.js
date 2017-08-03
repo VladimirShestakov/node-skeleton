@@ -20,7 +20,7 @@ class News {
         return this;
     }
 
-    async getOne(cond = {}){
+    async getOne(cond = {}) {
         if (cond._id) cond._id = ObjectID(cond._id);
         let news = await this.dbNews.findOne(cond);
         if (news) {
@@ -36,14 +36,14 @@ class News {
      * @param count
      * @returns {Promise.<void>}
      */
-    async getList(cond = {}, count){
+    async getList(cond = {}, count) {
         let filter = {};
         if (cond.search) {
             const regex = new RegExp(escapeRegexp(cond.search), 'i');
             filter['$or'] = [{title: regex}, {text: regex}];
         }
 
-        let news = await this.dbNews.find(filter).sort({date:-1}).limit(parseInt(count)||100).toArray();
+        let news = await this.dbNews.find(filter).sort({date: -1}).limit(parseInt(count) || 100).toArray();
         return news.map(item => {
             this.validator.validate('NewsView', item);
             return item;

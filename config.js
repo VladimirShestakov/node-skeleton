@@ -16,15 +16,11 @@ module.exports = {
                 pass: ''
             }
         },
-        defaults:{
+        defaults: {
             from: 'ShestakovVladimir <boolive@yandex.ru>',
             replyTo: "boolive@yandex.ru"
         }
     },
-    validator:{
-
-    },
-    users:{
-
-    }
+    validator: {},
+    users: {}
 };

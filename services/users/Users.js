@@ -22,7 +22,7 @@ class Users {
             // phone: [{"phone": 1}, {"unique": true}],
             // email: [{"email": 1}, {"unique": true}]
         });
-        this.dbChats = await db.initCollection('chats',{});
+        this.dbChats = await db.initCollection('chats', {});
         this.validator.addSchema(require('./schemes/UserView'), 'UserView');
         this.validator.addSchema(require('./schemes/User'), 'User');
         this.validator.addSchema(require('./schemes/UserRegistration'), 'UserRegistration');
@@ -34,7 +34,7 @@ class Users {
         return this;
     }
 
-    async getOne(cond = {}, currentUser = {}){
+    async getOne(cond = {}, currentUser = {}) {
         if (cond._id) cond._id = ObjectID(cond._id);
         let user = await this.dbUsers.findOne(cond);
         if (user) {
@@ -50,7 +50,7 @@ class Users {
         return null;
     }
 
-    async getList(cond = {}, offset, count, currentUser = {}){
+    async getList(cond = {}, offset, count, currentUser = {}) {
         // По  имени и нику
         if (cond.search) {
             const regex = new RegExp(escapeRegexp(cond.search), 'i');
@@ -59,13 +59,16 @@ class Users {
         delete cond.search;
 
 
-        let users = await this.dbUsers.find(cond).sort({nickname:1, name:1}).skip(parseInt(offset)||0).limit(parseInt(count)||100).toArray();
+        let users = await this.dbUsers.find(cond).sort({
+            nickname: 1,
+            name: 1
+        }).skip(parseInt(offset) || 0).limit(parseInt(count) || 100).toArray();
         return users.map(user => {
             return this.exportUserPublic(user);
         });
     }
 
-    async requestFacebook(access_token){
+    async requestFacebook(access_token) {
         return await new Promise(function (resolve, reject) {
             request.get('https://graph.facebook.com/v2.8/me', {
                 qs: {
@@ -87,7 +90,7 @@ class Users {
         });
     }
 
-    async requestGoogle(access_token){
+    async requestGoogle(access_token) {
         return new Promise(function (resolve, reject) {
             request.get('https://www.googleapis.com/oauth2/v1/userinfo', {
                 qs: {
@@ -111,7 +114,7 @@ class Users {
     async oauthLink(user, access_token, network) {
         let updateValues = {};
         let oUser = null;
-        if (network === 'facebook'){
+        if (network === 'facebook') {
             oUser = await this.requestFacebook(access_token);
 
             updateValues.fb_id = `${oUser.id}`;
@@ -120,9 +123,8 @@ class Users {
             if (!user.currency && oUser.currency) updateValues.currency = oUser.currency.user_currency;
 
             // Отвязка от других пользователей
-            await this.dbUsers.updateOne({fb_id: updateValues.fb_id}, {$set: {fb_id:""}});
-        } else
-        if (network === 'google'){
+            await this.dbUsers.updateOne({fb_id: updateValues.fb_id}, {$set: {fb_id: ""}});
+        } else if (network === 'google') {
             oUser = await this.requestGoogle(access_token);
 
             updateValues.gl_id = `${oUser.id}`;
@@ -131,7 +133,7 @@ class Users {
             if (!user.lang && oUser.locale) updateValues.lang = oUser.locale;
 
             // Отвязка от других пользователей
-            await this.dbUsers.updateOne({gl_id: updateValues.gl_id}, {$set: {gl_id:""}});
+            await this.dbUsers.updateOne({gl_id: updateValues.gl_id}, {$set: {gl_id: ""}});
         } else {
             throw new Error("Unsupported network");
         }
@@ -145,8 +147,7 @@ class Users {
         let updateValues = {};
         if (network === 'facebook') {
             updateValues.fb_id = '';
-        } else
-        if (network === 'google'){
+        } else if (network === 'google') {
             updateValues.gl_id = '';
         } else {
             throw new Error("Unsupported network");
@@ -161,7 +162,7 @@ class Users {
         let oUser = null;
         const token = await this.generateToken();
 
-        if (network === 'facebook'){
+        if (network === 'facebook') {
             oUser = await this.requestFacebook(access_token);
             user = await this.dbUsers.findOne({fb_id: `${oUser.id}`});
             // if (!user){
@@ -206,11 +207,10 @@ class Users {
                     throw this.validator.customErrors();
                 }
             }
-        } else
-        if (network === 'google'){
+        } else if (network === 'google') {
             oUser = await this.requestGoogle(access_token);
             user = await this.dbUsers.findOne({gl_id: `${oUser.id}`});
-            if (!user){
+            if (!user) {
                 user = await this.dbUsers.findOne({email: oUser.email.toLowerCase()});
             }
             if (user) {
@@ -238,7 +238,7 @@ class Users {
                         user: this.exportUser(user),
                         token
                     };
-                }else{
+                } else {
                     throw this.validator.customErrors();
                 }
             }

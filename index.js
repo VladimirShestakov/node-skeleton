@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 
-services.init(config).then(()=> {
+services.init(config).then(() => {
     app.use(require('./controllers'));
 
     app.listen(config.server.port, config.server.host, function () {

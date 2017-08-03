@@ -8,7 +8,7 @@ module.exports = async (router, s) => {
             const result = await news.getList({filter_type, filter, from: from || time_from}, count);
             res.json(result);
         } catch (e) {
-            res.status(400).json({ message: e.message });
+            res.status(400).json({message: e.message});
         }
     });
 

@@ -1,6 +1,6 @@
 const Ajv = require('ajv');
 
-class Validator extends Ajv{
+class Validator extends Ajv {
 
     constructor(config, services) {
         config = Object.assign({}, config, {
@@ -24,13 +24,13 @@ class Validator extends Ajv{
         return this;
     }
 
-    customErrors(){
-        const getMessage = (key, schema, property)=>{
-            if (schema && schema.errors){
-                if (typeof schema.errors === 'string'){
+    customErrors() {
+        const getMessage = (key, schema, property) => {
+            if (schema && schema.errors) {
+                if (typeof schema.errors === 'string') {
                     return schema.errors.replace('{key}', property);
                 } else {
-                    if (schema.errors[key]){
+                    if (schema.errors[key]) {
                         return schema.errors[key].replace('{key}', property);
                     }
                 }
@@ -40,7 +40,7 @@ class Validator extends Ajv{
         let result = {};
         this.errors.map(({keyword, params, dataPath, schema, parentSchema, message}) => {
             let key = dataPath.split('.').pop();
-            switch (keyword){
+            switch (keyword) {
                 case 'required':
                     key = params.missingProperty;
                     result[key] = getMessage(keyword, schema[key], key) || message;

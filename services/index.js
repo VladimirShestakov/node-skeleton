@@ -6,11 +6,11 @@ const Validator = require('./validator/Validator.js');
 
 class Services {
 
-    async init(config){
+    async init(config) {
         this.config = config;
     }
 
-    async getDb(){
+    async getDb() {
         return this.db ? this.db : (this.db = await new Db().init(this.config.db, this));
     }
 
@@ -18,15 +18,15 @@ class Services {
         return this.validator ? this.validator : (this.validator = await new Validator().init(this.config.validator, this));
     }
 
-    async getUsers(){
+    async getUsers() {
         return this.users ? this.users : (this.users = await (new Users()).init(this.config.users, this));
     }
 
-    async getNews(){
+    async getNews() {
         return this.news ? this.news : (this.news = await (new News()).init(this.config.news, this));
     }
 
-    async getMail(){
+    async getMail() {
         return this.mail ? this.mail : (this.mail = nodemailer.createTransport(this.config.mail.transport, this.config.mail.defaults));
     }
 }
